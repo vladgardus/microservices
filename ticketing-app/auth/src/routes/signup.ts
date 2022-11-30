@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post("/users/signup", AuthValidators.all, (req: Request, res: Response) => {
   const errors = validationResult(req);
-  const { email, password } = req.body;
+  const { email, password } = req.body as { email: string; password: string };
   if (!errors.isEmpty()) {
     throw new RequestValidationError(errors.array());
   }

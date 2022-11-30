@@ -1,21 +1,26 @@
 {
   "env": {
-    "browser": true,
+    "node": true,
     "es2021": true
   },
-  "extends": "standard-with-typescript",
+  "extends": [
+    "eslint:recommended",
+    "prettier",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  ],
   "overrides": [],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
   "parserOptions": {
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": ["./tsconfig.json"]
   },
   "rules": {
-    "quotes": ["error", "single"],
-    // we want to force semicolons
+    "quotes": ["error", "double"],
     "semi": ["error", "always"],
-    // we use 2 spaces to indent our code
     "indent": ["error", 2],
-    // we want to avoid extraneous spaces
     "no-multi-spaces": ["error"]
   }
 }
