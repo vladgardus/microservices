@@ -13,7 +13,6 @@ router.post("/users/signup", AuthValidators.all, (req: Request, res: Response) =
     throw new RequestValidationError(errors.array());
   }
   console.log(`Creating user ${email} ${password}`);
-  throw new DatabaseConnectionError();
   res.send({});
 });
 
