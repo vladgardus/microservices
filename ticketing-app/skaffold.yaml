@@ -5,12 +5,12 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
-  # local:
-  #   push: false
-  googleCloudBuild:
-    projectId: fourth-truck-370117
+  local:
+    push: false
+  # googleCloudBuild:
+  #   projectId: fourth-truck-370117
   artifacts:
-    - image: gcr.io/fourth-truck-370117/auth
+    - image: vladgardus/auth
       context: auth
       docker:
         dockerfile: Dockerfile

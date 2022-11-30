@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: gcr.io/fourth-truck-370117/auth
+          image: vladgardus/auth
 ---
 apiVersion: v1
 kind: Service
