@@ -10,7 +10,21 @@ interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
 
-interface UserDoc extends mongoose.Document, UserAttrs {}
+class UserDoc extends mongoose.Document {
+  email!: UserAttrs["email"];
+  password!: UserAttrs["password"];
+}
+
+interface UserDTO {
+  id: string;
+  email: string;
+}
+
+export class UserMapper {
+  static toDTO(user: UserDoc): UserDTO {
+    return { id: user._id, email: user.email };
+  }
+}
 
 const userSchema = new mongoose.Schema({ email: { type: String, required: true }, password: { type: String, required: true } });
 userSchema.statics.build = (attrs: UserAttrs) => {
