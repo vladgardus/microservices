@@ -7,9 +7,7 @@ export class DatabaseConnectionError extends MiddlewareError {
     super("Failed to connect to db");
     Object.setPrototypeOf(this, DatabaseConnectionError.prototype);
   }
-  serializeError(): {
-    errors: { message: string; field?: string | undefined }[];
-  } {
+  serializeError(): { errors: { message: string; field?: string | undefined }[] } {
     return { errors: [{ message: this.reason }] };
   }
 }

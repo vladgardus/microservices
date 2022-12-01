@@ -12,7 +12,7 @@ export class RequestValidationError extends MiddlewareError {
   serializeError(): { errors: { message: string; field?: string | undefined }[] } {
     return {
       errors: this.errors.map((error) => {
-        return { message: error.msg, field: error.param };
+        return { message: error.msg as string, field: error.param };
       }),
     };
   }

@@ -5,10 +5,8 @@ export class NotFoundError extends MiddlewareError {
     super("Route not found");
     Object.setPrototypeOf(this, NotFoundError.prototype);
   }
-  serializeError(): {
-    errors: { message: string; field?: string | undefined }[];
-  } {
-    throw [{ message: "Route not found" }];
+  serializeError(): { errors: { message: string; field?: string | undefined }[] } {
+    return { errors: [{ message: "Route not found" }] };
   }
   statusCode = 404;
 }

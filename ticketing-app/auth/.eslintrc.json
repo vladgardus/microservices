@@ -21,6 +21,18 @@
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "indent": ["error", 2],
-    "no-multi-spaces": ["error"]
+    "no-multi-spaces": ["error"],
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      {
+        "checksVoidReturn": {
+          "arguments": false,
+          "attributes": false
+        }
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars-experimental": "off"
   }
 }
