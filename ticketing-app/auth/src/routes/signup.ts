@@ -7,7 +7,7 @@ import { validateRequest } from "../middlewares/validate-request";
 
 const router = express.Router();
 
-router.post("/users/signup", AuthValidators.all, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+router.post("/users/signup", AuthValidators.signup, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body as UserAttrs;
   const existingUser = await User.findOne({ email });
   if (existingUser) {

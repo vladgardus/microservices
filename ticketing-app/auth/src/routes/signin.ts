@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-router.post("/users/signin", AuthValidators.all, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+router.post("/users/signin", AuthValidators.signin, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body as UserAttrs;
   const existingUser = await User.findOne({ email });
   if (!existingUser) {
