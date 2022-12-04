@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import app from "./app";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const start = async () => {
   if (!process.env.JWT_KEY) {

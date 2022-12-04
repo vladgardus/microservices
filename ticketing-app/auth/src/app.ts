@@ -7,10 +7,12 @@ import { signupRouter } from "./routes/signup";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
 import cookieSession from "cookie-session";
+import cors from "cors";
 
 const app = express();
 app.set("trust proxy", true);
 app.use(json());
+app.use(cors({ origin: "*" }));
 app.use(
   cookieSession({
     signed: false,
