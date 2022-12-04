@@ -1,9 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
-import { BadRequestError } from "../errors/bad-request-error";
+import { BadRequestError, validateRequest } from "@vgticketingapp/common";
 import { User, UserAttrs, UserMapper } from "../models/user";
 import AuthValidators from "../validators/AuthValidator";
 import jwt from "jsonwebtoken";
-import { validateRequest } from "../middlewares/validate-request";
 
 const router = express.Router();
 

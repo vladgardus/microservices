@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { BadRequestError } from "../errors/bad-request-error";
-import { validateRequest } from "../middlewares/validate-request";
+import { BadRequestError, validateRequest } from "@vgticketingapp/common";
 import { User, UserAttrs, UserMapper } from "../models/user";
 import { Password } from "../services/password";
 import AuthValidators from "../validators/AuthValidator";

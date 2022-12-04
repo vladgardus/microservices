@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { isAuthenticated } from "../middlewares/authenticated";
+import { isAuthenticated } from "@vgticketingapp/common";
 
 const router = express.Router();
 
