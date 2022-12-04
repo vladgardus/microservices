@@ -18,6 +18,14 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    - image: vladgardus/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     - image: vladgardus/client
       context: client
       docker:
