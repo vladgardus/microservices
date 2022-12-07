@@ -60,6 +60,12 @@ restart deployment after pushing image to docker hub:
 add a secret:
 `kubectl create secret generic [secret_name] --from-literal=[secret_key]=[secret_value]`
 
+install rabbitmq:
+```
+kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml"
+kubectl krew install rabbitmq
+```
+
 # Misc
 
 powershell command to give a command an alias:
