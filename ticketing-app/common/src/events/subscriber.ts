@@ -7,7 +7,7 @@ export abstract class Subscriber<T extends Event> {
   abstract pattern: T["pattern"];
   abstract onMessageConsumed(msg: ConsumeMessage, data: T["data"]): Promise<void> | void;
   private channel!: Channel;
-  protected eventBusHost = "localhost";
+  protected eventBusHost = "rabbitmq-srv";
   constructor() {}
   async build() {
     const connection = await connect(`amqp://${this.eventBusHost}:5672`);

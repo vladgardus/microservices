@@ -6,7 +6,7 @@ export abstract class Publisher<T extends Event> {
   abstract exchangeName: string;
   abstract pattern: T["pattern"];
   private channel!: Channel;
-  protected eventBusHost = "localhost";
+  protected eventBusHost = "rabbitmq-srv";
   constructor() {}
   async build() {
     const connection = await connect(`amqp://${this.eventBusHost}:5672`);
