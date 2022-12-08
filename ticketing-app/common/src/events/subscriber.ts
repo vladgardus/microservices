@@ -9,18 +9,11 @@ export abstract class Subscriber<T extends Event> {
   private connection: Connection;
   abstract onMessageConsumed(msg: ConsumeMessage, data: T["data"]): Promise<void> | void;
   private channel!: Channel;
-  protected eventBusHost = "rabbitmq-srv";
   constructor(connection: Connection) {
     this.connection = connection;
-    // process.once("SIGINT", () => {
-    //   connection.close();
-    // });
-    // process.once("SIGTERM", () => {
-    //   connection.close();
-    // });
+    Object.setPrototypeOf(this, Subscriber.prototype);
   }
   async build() {
-    // const connection = await connect(`amqp://${this.eventBusHost}:5672`);
     this.channel = await this.connection.createChannel();
     const exchangeResponse = await this.channel.assertExchange(this.exchangeName, "topic", { durable: true, autoDelete: false });
     const queueResponse = await this.channel.assertQueue(this.queueName, { autoDelete: true, durable: true });

@@ -7,12 +7,11 @@ export abstract class Publisher<T extends Event> {
   abstract pattern: T["pattern"];
   private connection: Connection;
   private channel!: Channel;
-  protected eventBusHost = "rabbitmq-srv";
   constructor(connection: Connection) {
     this.connection = connection;
+    Object.setPrototypeOf(this, Publisher.prototype);
   }
   async build() {
-    // const connection = await connect(`amqp://${this.eventBusHost}:5672`);
     this.channel = await this.connection.createChannel();
     const exchangeResponse = await this.channel.assertExchange(this.exchangeName, "topic", { durable: true, autoDelete: false });
     const queueResponse = await this.channel.assertQueue(this.queueName, { autoDelete: true, durable: true });
