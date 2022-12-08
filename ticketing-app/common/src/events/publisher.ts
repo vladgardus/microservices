@@ -9,7 +9,6 @@ export abstract class Publisher<T extends Event> {
   private channel!: Channel;
   constructor(connection: Connection) {
     this.connection = connection;
-    this.build();
   }
   build = async () => {
     try {
