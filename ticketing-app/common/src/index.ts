@@ -11,7 +11,10 @@ export * from "./middlewares/validate-request";
 
 export * from "./events/event";
 export * from "./events/patterns";
+export * from "./events/queues";
+export * from "./events/exchanges";
 export * from "./events/publisher";
 export * from "./events/subscriber";
 export * from "./events/ticket/ticket-created-event";
 export * from "./events/ticket/ticket-updated-event";
+export * from "./services/acknowledged-event-service";
