@@ -11,24 +11,15 @@ export abstract class Publisher<T extends Event> {
     this.connection = connection;
   }
   build = async () => {
-    try {
-      console.log("this in build ", this);
-      this.channel = await this.connection.createChannel();
-      console.log("channel created ", this.channel);
-      const exchangeResponse = await this.channel.assertExchange(this.exchangeName, "topic", { durable: true, autoDelete: false });
-      console.log("exchange created");
-      const queueResponse = await this.channel.assertQueue(this.queueName, { autoDelete: true, durable: true });
-      console.log("queue created");
-      await this.channel.bindQueue(queueResponse.queue, exchangeResponse.exchange, this.pattern);
-      console.log("queue binded");
-    } catch (err) {
-      console.error(err);
-    }
+    this.channel = await this.connection.createChannel();
+    const exchangeResponse = await this.channel.assertExchange(this.exchangeName, "topic", { durable: true, autoDelete: false });
+    const queueResponse = await this.channel.assertQueue(this.queueName, { autoDelete: true, durable: true });
+    await this.channel.bindQueue(queueResponse.queue, exchangeResponse.exchange, this.pattern);
     return this;
   };
 
   publish = (data: T["data"]) => {
-    console.log("this in publish ", this);
+    if (!this.channel) throw new Error("cannot publish a message before building the publisher. Try .build() before .publish()!");
     return this.channel.publish(this.exchangeName, this.pattern, Buffer.from(JSON.stringify(data)));
   };
 }

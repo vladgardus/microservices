@@ -20,6 +20,7 @@ export abstract class Subscriber<T extends Event> {
     return this;
   };
   listen = async () => {
+    if (!this.channel) throw new Error("cannot listen to incoming messages before building the subscriber. Try .build() before .publish()!");
     return this.channel.consume(this.queueName, async (msg) => {
       console.log(`message received ${this.pattern} / ${this.queueName}`);
       if (!msg) return;
