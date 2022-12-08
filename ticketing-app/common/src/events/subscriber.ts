@@ -11,8 +11,7 @@ export abstract class Subscriber<T extends Event> {
   private channel!: Channel;
   constructor(connection: Connection) {
     this.connection = connection;
-    this.build = this.build.bind(this);
-    this.listen = this.listen.bind(this);
+    this.build();
   }
   build = async () => {
     this.channel = await this.connection.createChannel();
