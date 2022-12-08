@@ -11,15 +11,15 @@ export abstract class Publisher<T extends Event> {
     this.connection = connection;
     Object.setPrototypeOf(this, Publisher.prototype);
   }
-  async build() {
+  build = async () => {
     this.channel = await this.connection.createChannel();
     const exchangeResponse = await this.channel.assertExchange(this.exchangeName, "topic", { durable: true, autoDelete: false });
     const queueResponse = await this.channel.assertQueue(this.queueName, { autoDelete: true, durable: true });
     await this.channel.bindQueue(queueResponse.queue, exchangeResponse.exchange, this.pattern);
     return this;
-  }
+  };
 
-  publish(data: T["data"]) {
+  publish = (data: T["data"]) => {
     return this.channel.publish(this.exchangeName, this.pattern, Buffer.from(JSON.stringify(data)));
-  }
+  };
 }
