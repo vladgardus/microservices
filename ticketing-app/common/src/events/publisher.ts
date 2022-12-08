@@ -9,7 +9,8 @@ export abstract class Publisher<T extends Event> {
   private channel!: Channel;
   constructor(connection: Connection) {
     this.connection = connection;
-    Object.setPrototypeOf(this, Publisher.prototype);
+    this.build = this.build.bind(this);
+    this.publish = this.publish.bind(this);
   }
   build = async () => {
     this.channel = await this.connection.createChannel();
