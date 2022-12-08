@@ -1,22 +1,19 @@
-import { Channel, connect } from "amqplib";
+import { Channel, connect, Connection } from "amqplib";
 import { Event } from "./event";
 
 export abstract class Publisher<T extends Event> {
   abstract queueName: string; // should be unique per microservice
   abstract exchangeName: string;
   abstract pattern: T["pattern"];
+  private connection: Connection;
   private channel!: Channel;
   protected eventBusHost = "rabbitmq-srv";
-  constructor() {}
+  constructor(connection: Connection) {
+    this.connection = connection;
+  }
   async build() {
-    const connection = await connect(`amqp://${this.eventBusHost}:5672`);
-    process.once("SIGINT", () => {
-      connection.close();
-    });
-    process.once("SIGTERM", () => {
-      connection.close();
-    });
-    this.channel = await connection.createChannel();
+    // const connection = await connect(`amqp://${this.eventBusHost}:5672`);
+    this.channel = await this.connection.createChannel();
     const exchangeResponse = await this.channel.assertExchange(this.exchangeName, "topic", { durable: true, autoDelete: false });
     const queueResponse = await this.channel.assertQueue(this.queueName, { autoDelete: true, durable: true });
     await this.channel.bindQueue(queueResponse.queue, exchangeResponse.exchange, this.pattern);

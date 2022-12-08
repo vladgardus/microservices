@@ -1,23 +1,27 @@
-import { Channel, connect, ConsumeMessage } from "amqplib";
+import { Channel, connect, ConsumeMessage, Connection } from "amqplib";
+import { saveAcknowledgedEvent } from "../services/acknowledged-event-service";
 import { Event } from "./event";
 
 export abstract class Subscriber<T extends Event> {
   abstract queueName: string; // should be unique per microservice
   abstract exchangeName: string;
   abstract pattern: T["pattern"];
+  private connection: Connection;
   abstract onMessageConsumed(msg: ConsumeMessage, data: T["data"]): Promise<void> | void;
   private channel!: Channel;
   protected eventBusHost = "rabbitmq-srv";
-  constructor() {}
+  constructor(connection: Connection) {
+    this.connection = connection;
+    // process.once("SIGINT", () => {
+    //   connection.close();
+    // });
+    // process.once("SIGTERM", () => {
+    //   connection.close();
+    // });
+  }
   async build() {
-    const connection = await connect(`amqp://${this.eventBusHost}:5672`);
-    process.once("SIGINT", () => {
-      connection.close();
-    });
-    process.once("SIGTERM", () => {
-      connection.close();
-    });
-    this.channel = await connection.createChannel();
+    // const connection = await connect(`amqp://${this.eventBusHost}:5672`);
+    this.channel = await this.connection.createChannel();
     const exchangeResponse = await this.channel.assertExchange(this.exchangeName, "topic", { durable: true, autoDelete: false });
     const queueResponse = await this.channel.assertQueue(this.queueName, { autoDelete: true, durable: true });
     await this.channel.bindQueue(queueResponse.queue, exchangeResponse.exchange, this.pattern);
@@ -30,6 +34,8 @@ export abstract class Subscriber<T extends Event> {
       try {
         let data = JSON.parse(msg.content.toString()) as T["data"];
         await this.onMessageConsumed(msg, data);
+        await saveAcknowledgedEvent(msg.content.toString());
+        this.channel.ack(msg);
       } catch (err) {
         this.channel.nack(msg, false, true);
       }
