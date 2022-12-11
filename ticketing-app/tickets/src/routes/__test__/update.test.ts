@@ -1,6 +1,11 @@
+import { Patterns } from "@vgticketingapp/common";
 import mongoose from "mongoose";
 import request from "supertest";
 import app from "../../app";
+import { PublishEvent } from "../../models/publish-event";
+
+const amqplib = require("amqplib-mocks");
+jest.setMock("amqplib", amqplib);
 
 it("returns 404 if id does not exist", async () => {
   const title = "concert";
@@ -40,4 +45,7 @@ it("updates the ticket with the provided valid inputs", async () => {
   const ticketResponse = await request(app).get(`/api/tickets/${response.body.id}`).send({}).expect(200);
   expect(ticketResponse.body.title).toEqual(newTitle);
   expect(ticketResponse.body.price).toEqual(price);
+  let events = await PublishEvent.find({});
+  expect(events.filter((event) => event.pattern == Patterns.TicketCreated).length).toEqual(1);
+  expect(events.filter((event) => event.pattern == Patterns.TicketUpdated).length).toEqual(1);
 });

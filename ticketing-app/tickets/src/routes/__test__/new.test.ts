@@ -1,6 +1,11 @@
+import { Patterns } from "@vgticketingapp/common";
 import request from "supertest";
 import app from "../../app";
+import { PublishEvent } from "../../models/publish-event";
 import { Ticket } from "../../models/ticket";
+
+const amqplib = require("amqplib-mocks");
+jest.setMock("amqplib", amqplib);
 
 it("route handler listening to /api/tickets for post requests", async () => {
   const response = await request(app).post("/api/tickets").send({});
@@ -32,6 +37,9 @@ it("creates a ticket with valid inputs", async () => {
   expect(tickets.length).toEqual(0);
   await request(app).post("/api/tickets").set("Cookie", signin()).send({ title: "adsadasdasdasdsa", price: 10 }).expect(201);
   tickets = await Ticket.find({});
+  let events = await PublishEvent.find({});
   expect(tickets.length).toEqual(1);
   expect(tickets[0].price).toEqual(10);
+  expect(events.length).toEqual(1);
+  expect(events[0].pattern).toEqual(Patterns.TicketCreated);
 });

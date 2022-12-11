@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import app from "./app";
 import * as dotenv from "dotenv";
+import { amqpWrapper } from "./amqp-wrapper";
+import doWithRetry from "./helpers/do-with-retry";
+import publishEventsJob from "./jobs/publish-events.job";
 dotenv.config();
 
 const start = async () => {
@@ -16,6 +19,19 @@ const start = async () => {
   } catch (err) {
     console.error(err);
   }
+
+  await doWithRetry(amqpWrapper.connect, 10, 2000);
+
+  publishEventsJob.start();
+
+  process.once("SIGINT", () => {
+    console.log("will close amqp connection on signal SIGINT");
+    amqpWrapper.connection?.close();
+  });
+  // process.once("SIGTERM", () => {
+  //   console.log("will close amqp connection on signal SIGTERM");
+  //   amqpWrapper.connection?.close();
+  // });
 
   app.listen(3000, () => {
     console.log("Listening on 3000");

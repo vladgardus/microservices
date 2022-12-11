@@ -35,3 +35,10 @@ global.signin = () => {
   const base64 = Buffer.from(JSON.stringify({ jwt: token })).toString("base64");
   return [`session=${base64}`];
 };
+
+// setup
+var mockRequire = require("mock-require");
+mockRequire("amqplib", "mock-amqplib");
+
+// teardow
+mockRequire.stopAll();
