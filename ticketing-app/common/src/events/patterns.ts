@@ -3,5 +3,5 @@ export enum Patterns {
   TicketUpdated = "ticket.updated",
   TicketAll = "ticket.*",
   OrderCreated = "order.created",
-  OrderUpdated = "order.updated",
+  OrderCanceled = "order.canceled",
 }
