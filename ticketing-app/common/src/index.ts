@@ -15,6 +15,7 @@ export * from "./events/queues";
 export * from "./events/exchanges";
 export * from "./events/publisher";
 export * from "./events/subscriber";
+export * from "./events/types/order-status";
 export * from "./events/ticket/ticket-created-event";
 export * from "./events/ticket/ticket-updated-event";
 export * from "./services/acknowledged-event-service";
