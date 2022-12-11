@@ -1,4 +1,4 @@
 export enum Exchanges {
-    Ticket = "ticket-exchange",
-  }
-  
+  Ticket = "ticket-exchange",
+  Order = "order-exchange",
+}
