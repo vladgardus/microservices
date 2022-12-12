@@ -33,6 +33,7 @@ export abstract class Subscriber<T extends Event> {
           await saveAcknowledgedEvent(msg.content.toString());
           this.channel.ack(msg);
         } catch (err) {
+          console.error("error while consuming message", err);
           // requeue the message but at the back of the queue
           this.channel.publish(this.exchangeName, this.pattern, msg.content);
           this.channel.nack(msg, false, false);
