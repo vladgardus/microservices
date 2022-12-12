@@ -32,7 +32,7 @@ export abstract class Subscriber<T extends Event> {
           await saveAcknowledgedEvent(msg.content.toString());
           this.channel.ack(msg);
         } catch (err) {
-          this.channel.nack(msg, true, true);
+          this.channel.nack(msg, false, true);
         }
       },
       { noAck: false }
