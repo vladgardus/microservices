@@ -21,17 +21,21 @@ export abstract class Subscriber<T extends Event> {
   };
   listen = async () => {
     if (!this.channel) throw new Error("cannot listen to incoming messages before building the subscriber. Try .build() before .publish()!");
-    return this.channel.consume(this.queueName, async (msg) => {
-      console.log(`message received ${this.pattern} / ${this.queueName}`);
-      if (!msg) return;
-      try {
-        let data = JSON.parse(msg.content.toString()) as T["data"];
-        await this.onMessageConsumed(msg, data);
-        await saveAcknowledgedEvent(msg.content.toString());
-        this.channel.ack(msg);
-      } catch (err) {
-        this.channel.nack(msg, false, true);
-      }
-    });
+    return this.channel.consume(
+      this.queueName,
+      async (msg) => {
+        console.log(`message received ${this.pattern} / ${this.queueName}`);
+        if (!msg) return;
+        try {
+          let data = JSON.parse(msg.content.toString()) as T["data"];
+          await this.onMessageConsumed(msg, data);
+          await saveAcknowledgedEvent(msg.content.toString());
+          this.channel.ack(msg);
+        } catch (err) {
+          this.channel.nack(msg, true, true);
+        }
+      },
+      { noAck: false }
+    );
   };
 }
