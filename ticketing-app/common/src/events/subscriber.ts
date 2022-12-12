@@ -17,6 +17,7 @@ export abstract class Subscriber<T extends Event> {
     const exchangeResponse = await this.channel.assertExchange(this.exchangeName, "topic", { durable: true, autoDelete: false });
     const queueResponse = await this.channel.assertQueue(this.queueName, { autoDelete: true, durable: true });
     await this.channel.bindQueue(queueResponse.queue, exchangeResponse.exchange, this.pattern);
+    await this.channel.prefetch(1);
     return this;
   };
   listen = async () => {
