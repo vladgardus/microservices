@@ -4,4 +4,5 @@ export enum Patterns {
   TicketAll = "ticket.*",
   OrderCreated = "order.created",
   OrderCanceled = "order.canceled",
+  ExpirationComplete = "expiration.complete",
 }

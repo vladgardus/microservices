@@ -3,4 +3,5 @@ export enum Queues {
   TicketUpdated = "ticket-updated-queue",
   OrderCreated = "order-created-queue",
   OrderCanceled = "order-canceled-queue",
+  ExpirationComplete = "expiration-complete-queue",
 }
