@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import request from "supertest";
 import app from "../../app";
 import { PublishEvent } from "../../models/publish-event";
+import { Ticket } from "../../models/ticket";
 
 const amqplib = require("amqplib-mocks");
 jest.setMock("amqplib", amqplib);
@@ -48,4 +49,16 @@ it("updates the ticket with the provided valid inputs", async () => {
   let events = await PublishEvent.find({});
   expect(events.filter((event) => event.pattern == Patterns.TicketCreated).length).toEqual(1);
   expect(events.filter((event) => event.pattern == Patterns.TicketUpdated).length).toEqual(1);
+});
+
+it("rejects updates if ticket is reserver", async () => {
+  const title = "concert";
+  const newTitle = "sadasdsadas";
+  const price = 20;
+  const cookie = signin();
+  const response = await request(app).post(`/api/tickets`).set("Cookie", cookie).send({ title, price }).expect(201);
+  const ticket = await Ticket.findById(response.body.id);
+  ticket?.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
+  await ticket?.save();
+  await request(app).put(`/api/tickets/${response.body.id}`).set("Cookie", cookie).send({ title: newTitle }).expect(400);
 });

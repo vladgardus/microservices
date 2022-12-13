@@ -1,0 +1,21 @@
+import { amqpWrapper } from "../../../amqp-wrapper";
+import { TicketCreatedSubscriber } from "../ticket-created-subscriber";
+import { TicketCreatedEvent } from "@vgticketingapp/common";
+import mongoose from "mongoose";
+import { ConsumeMessage } from "amqplib";
+import { Ticket } from "../../../models/ticket";
+
+const setup = async () => {
+  const subscriber = await new TicketCreatedSubscriber(amqpWrapper.connection).build();
+  const data: TicketCreatedEvent["data"] = { id: new mongoose.Types.ObjectId().toHexString(), price: 10, title: "concert", version: 0, userId: new mongoose.Types.ObjectId().toHexString() };
+  // @ts-ignore
+  const message: ConsumeMessage = { content: Buffer.from(JSON.stringify(data)), fields: {}, properties: {} };
+  return { subscriber, data, message };
+};
+it("creates and saves a ticket", async () => {
+  const { subscriber, data, message } = await setup();
+  await subscriber.onMessageConsumed(message, data);
+  const tickets = await Ticket.find({});
+  expect(tickets.length).toEqual(1);
+  expect(tickets[0].title).toEqual(data.title);
+});

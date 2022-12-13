@@ -76,3 +76,13 @@ install Ingress NGINX:
 
 add following line to hosts file:
 127.0.0.1 host_domain_from_ingress
+
+# Microservices architecture explained
+- each microservice has its own database and it is not allowed for a microservice to look directly into a database belonging to some other microservice
+- the way those microservices communicate is via async messages/events
+- the event bus/message queue takes care of listening to or publishing messages to all listeners
+- multiple instances of the same microservice need to bind to the same queue so that events don't get duplicated
+- each microservice will internally store whatever data they need coming events (microservice 1 fires an event when a record is inserted and microservice 2 listens to the event and saved the id of the record to use it internally)
+- each event will have a version flag which will be unique per record(microservice 1 fires 3 events: record created, record updated1, record updated2. microservice 2 listens to those events and can possibly process them in any order if there are multiple instances available. When processing the event, the version flag related to the record is the deciding factor of the order that events should be processed. record created has version 1, record updated1 has version 2, record updated2 has version 3. if record updated1 is processed before record created, then the event will be not acknowledged and will go back into queue)
+- the version flag is handled with optimistic concurrency control
+

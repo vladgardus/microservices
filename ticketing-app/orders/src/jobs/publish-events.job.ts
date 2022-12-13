@@ -1,8 +1,8 @@
-import cron from "node-cron";
-import { TicketPublishers } from "../events/init-publishers";
 import { PublishEvent } from "../models/publish-event";
+import cron from "node-cron";
+import { OrderPublishers } from "../events/init-publishers";
 
-const publishEventsJob = (publishers: TicketPublishers) =>
+const publishEventsJob = (publishers: OrderPublishers) =>
   cron.schedule("* * * * *", async () => {
     console.log("starting job to publish events");
     let unpublishedEvents = await PublishEvent.find({ isPublished: false }).sort({ timestamp: 1 });

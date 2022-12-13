@@ -1,7 +1,5 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
-import app from "../app";
-import request from "supertest";
 import jwt from "jsonwebtoken";
 import doWithRetry from "../helpers/do-with-retry";
 import { amqpWrapper } from "../amqp-wrapper";

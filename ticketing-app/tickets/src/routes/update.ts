@@ -1,4 +1,4 @@
-import { isAuthenticated, validateRequest, NotFoundError, UnauthorizedError, DatabaseConnectionError, Patterns } from "@vgticketingapp/common";
+import { isAuthenticated, validateRequest, NotFoundError, UnauthorizedError, DatabaseConnectionError, Patterns, BadRequestError } from "@vgticketingapp/common";
 import express, { NextFunction, Request, Response } from "express";
 import { Ticket, TicketMapper } from "../models/ticket";
 import TicketValidators from "../validators/TicketValidator";
@@ -13,6 +13,10 @@ router.put("/tickets/:id", isAuthenticated, TicketValidators.all, validateReques
   const ticket = await Ticket.findById(id);
   if (!ticket) {
     next(new NotFoundError());
+    return;
+  }
+  if (ticket.orderId) {
+    next(new BadRequestError("Cannot edit a reserved ticket"));
     return;
   }
   if (ticket.userId != req.user?.id) {
