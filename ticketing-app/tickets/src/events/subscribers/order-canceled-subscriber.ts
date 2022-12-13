@@ -28,7 +28,7 @@ export class OrderCanceledSubscriber extends Subscriber<OrderCanceledEvent> {
   constructor(connection: Connection) {
     super(connection);
   }
-  queueName = Queues.OrderCanceled;
+  queueName = `${Queues.OrderCanceled}_${process.env.npm_package_name}`;
   exchangeName = Exchanges.Order;
   readonly pattern = Patterns.OrderCanceled;
 }

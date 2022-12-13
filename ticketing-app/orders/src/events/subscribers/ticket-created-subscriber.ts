@@ -10,7 +10,7 @@ export class TicketCreatedSubscriber extends Subscriber<TicketCreatedEvent> {
   constructor(connection: Connection) {
     super(connection);
   }
-  queueName = Queues.TicketCreated;
+  queueName = `${Queues.TicketCreated}_${process.env.npm_package_name}`;
   exchangeName = Exchanges.Ticket;
   readonly pattern = Patterns.TicketCreated;
 }

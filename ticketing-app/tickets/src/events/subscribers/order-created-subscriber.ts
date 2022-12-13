@@ -28,7 +28,7 @@ export class OrderCreatedSubscriber extends Subscriber<OrderCreatedEvent> {
   constructor(connection: Connection) {
     super(connection);
   }
-  queueName = Queues.OrderCreated;
+  queueName = `${Queues.OrderCreated}_${process.env.npm_package_name}`;
   exchangeName = Exchanges.Order;
   readonly pattern = Patterns.OrderCreated;
 }
