@@ -7,6 +7,7 @@ import publishEventsJob from "./jobs/publish-events.job";
 import { TicketCreatedSubscriber } from "./events/subscribers/ticket-created-subscriber";
 import { TicketUpdatedSubscriber } from "./events/subscribers/ticket-updated-subscriber";
 import initPublishers from "./events/init-publishers";
+import { ExpirationCompleteSubscriber } from "./events/subscribers/expiration-complete-subscriber";
 dotenv.config();
 
 const start = async () => {
@@ -34,6 +35,9 @@ const start = async () => {
 
   const updatedSubscriber = await new TicketUpdatedSubscriber(amqpWrapper.connection).build();
   updatedSubscriber.listen();
+
+  const expirationListener = await new ExpirationCompleteSubscriber(amqpWrapper.connection).build();
+  expirationListener.listen();
 
   process.once("SIGINT", () => {
     console.log("will close amqp connection on signal SIGINT");
