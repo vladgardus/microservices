@@ -4,4 +4,5 @@ export enum Queues {
   OrderCreated = "order-created-queue",
   OrderCanceled = "order-canceled-queue",
   ExpirationComplete = "expiration-complete-queue",
+  PaymentCreated = "payment-created-queue",
 }

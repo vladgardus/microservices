@@ -5,4 +5,5 @@ export enum Patterns {
   OrderCreated = "order.created",
   OrderCanceled = "order.canceled",
   ExpirationComplete = "expiration.complete",
+  PaymentCreated = "payment.created",
 }
