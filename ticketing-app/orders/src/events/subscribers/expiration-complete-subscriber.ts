@@ -10,6 +10,9 @@ export class ExpirationCompleteSubscriber extends Subscriber<ExpirationCompleteE
     if (!order) {
       throw new Error("order not found");
     }
+    if (order.status === OrderStatus.Complete) {
+      return;
+    }
     order.set({ status: OrderStatus.Canceled });
     await order.save();
     let publisher = await new OrderCanceledPublisher(amqpWrapper.connection).build();
