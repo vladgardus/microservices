@@ -1,12 +1,12 @@
 "use client";
 
 import { FormEventHandler, useEffect, useState } from "react";
-import useRequest from "../../../hooks/use-request";
+import useRequest from "../../../../hooks/use-request";
 import { useRouter } from "next/navigation";
 import { NextPage } from "next";
 import Link from "next/link";
 
-interface AuthenticationProps {
+type AuthenticationProps = {
   children: JSX.Element;
   params: { page: string };
 }
@@ -20,7 +20,6 @@ const Authentication: NextPage<AuthenticationProps> = ({ params }) => {
     if (params.page === "signout") {
       doRequest().then(() => {
         router.push("/auth/signin");
-        router.refresh();
       });
     }
   }, []);
@@ -30,7 +29,6 @@ const Authentication: NextPage<AuthenticationProps> = ({ params }) => {
     let response = await doRequest();
     if (response?.data) {
       router.push("/");
-      router.refresh();
     }
   };
   return (

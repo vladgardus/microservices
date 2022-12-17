@@ -15,14 +15,14 @@ const isApiErrorResponse = (err: any): err is ApiErrorResponse => {
 
 const useRequest = ({ url, method, body }: UseRequestProps) => {
   const [errors, setErrors] = useState(<></>);
-  const doRequest = () =>
+  const doRequest = (newBody?: { [key: string]: any }) =>
     new Promise<{ data?: { [key: string]: string | number }; err?: Error }>(async (resolve, reject) => {
       setErrors(<></>);
       try {
         const requestOptions = {
           method,
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
+          body: JSON.stringify(newBody ?? body),
         };
         const response = await (await fetch(url, requestOptions)).json();
         if (response.errors) throw { errors: response.errors };
